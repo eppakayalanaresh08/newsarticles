@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Articles</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+#news-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.article {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.article img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.article h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.article p {
+    margin: 10px 0;
+}
+
+    </style>
+</head>
+
+
+<body>
+    <header>
+        <h1>Latest News</h1>
+    </header>
+    <main id="news-container">
+        <!-- News articles will be dynamically inserted here -->
+    </main>
+    <script src="script.js"></script>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const apiUrl = 'https://newsapi.org/v2/everything?q=tesla&from=2024-07-28&sortBy=publishedAt&apiKey=4ca4d38c91ac48458c77d60c792997cd';
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            const newsContainer = document.getElementById('news-container');
+            const articles = data.articles;
+
+            articles.forEach(article => {
+                const articleElement = document.createElement('div');
+                articleElement.classList.add('article');
+
+                articleElement.innerHTML = `
+                    <img src="${article.urlToImage}" alt="${article.title}">
+                    <h2><a href="${article.url}" target="_blank">${article.title}</a></h2>
+                    <p>${article.description}</p>
+                    <p><small>Published at: ${new Date(article.publishedAt).toLocaleString()}</small></p>
+                `;
+
+                newsContainer.appendChild(articleElement);
+            });
+        })
+        .catch(error => console.error('Error fetching news:', error));
+});
+
+    </script>
+</body>
+</html>
